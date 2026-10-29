@@ -363,10 +363,16 @@ class ExtendedImageGestureState extends State<ExtendedImageGesture>
           pageAxisDelta.abs().greaterThan(crossAxisDelta.abs());
       final bool isAtInitialScale =
           (_gestureDetails!.totalScale ?? 1).lessThanOrEqualTo(1);
+      final SlideAxis? slideAxis =
+          extendedImageSlidePageState?.widget.slideAxis;
+      // Preserve slide-out priority when both gestures use the same axis.
+      final bool slideAxisCompetesForPageAxis = slideAxis != null &&
+          slideAxis != SlideAxis.both &&
+          (axis == Axis.horizontal) == (slideAxis == SlideAxis.horizontal);
       final bool movePage = _pageViewState!.isDraging ||
           (isSinglePointerPan &&
               (isAtInitialScale
-                  ? followsPageAxis
+                  ? (followsPageAxis && !slideAxisCompetesForPageAxis)
                   : _gestureDetails!.movePage(focalPointDelta, axis)));
 
       if (movePage) {
