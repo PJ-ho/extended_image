@@ -195,6 +195,7 @@ class ExtendedImageGesturePageViewState
     if (value != null && !value.mounted) {
       return;
     }
+    extendedImageGestureStates.remove(value);
     extendedImageGestureStates.add(value!);
   }
 
